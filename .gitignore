@@ -1,0 +1,14 @@
+*.pyc
+
+*~
+
+__pycache__
+
+.vscode
+env
+.env
+*.db
+node_modules/
+nodejs安装包/
+bootstrap-3.3.7-dist/
+vue-devtools/
