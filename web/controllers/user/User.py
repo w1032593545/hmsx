@@ -1,9 +1,9 @@
-from flask import Blueprint
+  
+from flask import Blueprint,render_template
 
 
 router_user = Blueprint('user_page',__name__)
 
-
-@router_user.route('/login')
+@router_user.route("/login")
 def login():
-    return 'login'
+    return render_template('user/login.html')
