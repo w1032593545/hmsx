@@ -24,7 +24,7 @@ var user_login_ops = {
 
             btn_target.addClass('disabled')
 
-            // Ajax 亲后端分离的，数据格式是json，
+            // Ajax 前后端分离的，数据格式是json，
             // 前端发送的数据是json格式的，所以后端response返回的数据也得是json格式的
             $.ajax({
                 url:"/user/login",
