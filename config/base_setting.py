@@ -6,3 +6,10 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # cookie
 AUTH_COOKIE_NAME = '1903_hmsx'
+
+# 拦截器忽略规则
+IGNORE_URLS = ["^/user/login"]
+IGNORE_CHECK_LOGIN_URLS = [
+    "^/static",
+    "^/favicon.ico"
+]
