@@ -1,10 +1,11 @@
 from flask import Blueprint,render_template,request,redirect,jsonify
+from sqlalchemy import or_
 
 from common.models.User import User
 from common.libs.UrlManager import UrlManager
 from common.libs.user.Helper import *
 from common.libs.user.UserService import UserService
-from application import db
+from application import db,app
 
 
 router_account = Blueprint("account_page",__name__)
@@ -12,8 +13,31 @@ router_account = Blueprint("account_page",__name__)
 @router_account.route('/index')
 def index():
     resp_data = {}
-    li = User.query.all()
+    query = User.query
+    req = request.values
+    page = int(req['p']) if 'p' in req and req['p'] else 1
+    if 'status' in req and int(req['status']) > -1:
+        query = query.filter(User.status == int(req['status']))
+    if 'mix_kw' in req:
+        rule = or_(User.nickname.ilike("%{0}%".format(req["mix_kw"])),User.mobile.ilike("%{0}%".format(req['mix_kw'])))
+        query = query.filter(rule)
+
+    params = {
+        'total':query.count(),  # 总查询结果数
+        'page_size':5,  # 每页个数
+        'page':page,  # 当前页码
+        'url':request.full_path.replace("&p={}".format(page),'')
+    }
+    pages = iPagenation(params)
+    # 当前页数开始位置
+    offset = (page-1) * 5
+    # 当前页数结束位置
+    limit = page * 5
+
+    li = query.all()[offset:limit]
     resp_data["list"] = li
+    resp_data["status"] = app.config["STATUS"]
+    resp_data['pages'] = pages
     return render_template("/account/index.html",**resp_data)
 
 
